@@ -5,7 +5,7 @@ session_start();
 
 // Site Configuration
 define('SITE_NAME', 'My Portfolio');
-define('SITE_URL', 'http://localhost/school/portfolio');
+define('SITE_URL', 'http://localhost/suman%20portfolio');
 define('AUTHOR_NAME', 'John Doe');
 define('AUTHOR_EMAIL', 'john.doe@example.com');
 define('AUTHOR_PHONE', '+1 (555) 123-4567');

@@ -7,7 +7,7 @@ class Database {
     private static $instance = null;
     private $connection;
     private $host = 'localhost';
-    private $db_name = 'portfolio_db';
+    private $db_name = 'portfolio';
     private $username = 'root';
     private $password = ''; // Change for production
     private $charset = 'utf8mb4';
