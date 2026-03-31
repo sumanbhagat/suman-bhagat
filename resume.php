@@ -8,20 +8,13 @@ $resume_data = getResumeData();
 <section class="hero" style="min-height: 50vh;">
     <div class="container">
         <div class="hero-content">
-            <?php if (!empty($resume_data['hero_image'])): ?>
-            <div class="hero-image" style="text-align: center; margin-bottom: 30px;">
-                <img src="<?php echo htmlspecialchars($resume_data['hero_image']); ?>" alt="Resume Hero" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            </div>
-            <?php endif; ?>
             <div class="hero-text">
-                <h1><?php echo htmlspecialchars($resume_data['hero_title']); ?></h1>
-                <p class="subtitle"><?php echo htmlspecialchars($resume_data['hero_subtitle']); ?></p>
-                <p><?php echo htmlspecialchars($resume_data['hero_bio']); ?></p>
+                <h1><?php echo htmlspecialchars($resume_data['full_name'] ?? 'Suman Kumar Bhagat'); ?></h1>
+                <p class="subtitle"><?php echo htmlspecialchars($resume_data['title'] ?? 'Full Stack Developer'); ?></p>
+                <p><?php echo htmlspecialchars($resume_data['summary'] ?? 'Experienced full-stack developer with expertise in modern web technologies and a passion for creating exceptional digital experiences.'); ?></p>
                 <div class="hero-buttons" style="margin-top: 30px;">
-                    <?php if (!empty($resume_data['resume_file'])): ?>
-                    <a href="<?php echo htmlspecialchars($resume_data['resume_file']); ?>" class="btn btn-primary" download><i class="fas fa-download"></i> Download PDF</a>
-                    <?php endif; ?>
-                    <a href="contact.php" class="btn btn-secondary">Hire Me</a>
+                    <a href="contact.php" class="btn btn-primary">Hire Me</a>
+                    <a href="#experience" class="btn btn-secondary">View Experience</a>
                 </div>
             </div>
         </div>
@@ -35,13 +28,9 @@ $resume_data = getResumeData();
             <!-- Sidebar -->
             <div class="resume-sidebar">
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <?php if (!empty($resume_data['profile_photo'])): ?>
-                    <img src="<?php echo htmlspecialchars($resume_data['profile_photo']); ?>" alt="<?php echo htmlspecialchars($site_settings['author_name']); ?>" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 15px;" onerror="this.src='https://via.placeholder.com/150x150/ffffff/6366f1?text=<?php echo urlencode(substr($site_settings['author_name'], 0, 2)); ?>'">
-                    <?php else: ?>
-                    <img src="assets/images/profile.jpg" alt="<?php echo htmlspecialchars($site_settings['author_name']); ?>" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 15px;" onerror="this.src='https://via.placeholder.com/150x150/ffffff/6366f1?text=<?php echo urlencode(substr($site_settings['author_name'], 0, 2)); ?>'">
-                    <?php endif; ?>
+                    <img src="assets/images/placeholder-about.svg" alt="<?php echo htmlspecialchars($site_settings['author_name']); ?>" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 15px;">
                     <h2 style="font-size: 1.5rem;"><?php echo htmlspecialchars($site_settings['author_name']); ?></h2>
-                    <p style="opacity: 0.8;">Full Stack Developer</p>
+                    <p style="opacity: 0.8;"><?php echo htmlspecialchars($resume_data['title'] ?? 'Full Stack Developer'); ?></p>
                 </div>
                 
                 <div style="margin-bottom: 30px;">
@@ -71,7 +60,9 @@ $resume_data = getResumeData();
                 
                 <div>
                     <h4 style="margin-bottom: 15px; color: var(--accent-color);"><i class="fas fa-certificate"></i> Certifications</h4>
-                    <?php foreach ($resume_data['certifications'] as $cert): ?>
+                    <?php 
+                    $certifications = $resume_data['certifications'] ?? ['PHP Developer Certification', 'Web Design Certificate', 'Database Management'];
+                    foreach ($certifications as $cert): ?>
                     <p style="font-size: 0.85rem; margin-bottom: 8px;"><i class="fas fa-check-circle" style="color: var(--accent-color);"></i> <?php echo htmlspecialchars($cert); ?></p>
                     <?php endforeach; ?>
                 </div>
@@ -86,11 +77,14 @@ $resume_data = getResumeData();
                 </div>
                 
                 <!-- Experience -->
-                <div class="resume-section">
+                <div class="resume-section" id="experience">
                     <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
                     <?php 
-                    $about_data = getAboutData();
-                    foreach ($about_data['experience'] as $job): 
+                    $experience = $resume_data['experience'] ?? [
+                        ['title' => 'Senior Full Stack Developer', 'company' => 'Tech Company', 'period' => '2020 - Present', 'description' => 'Lead development of web applications and API integrations.'],
+                        ['title' => 'Full Stack Developer', 'company' => 'Digital Agency', 'period' => '2018 - 2020', 'description' => 'Developed responsive websites and web applications for various clients.']
+                    ];
+                    foreach ($experience as $job): 
                     ?>
                     <div class="resume-item">
                         <h4><?php echo htmlspecialchars($job['title']); ?></h4>
@@ -103,11 +97,15 @@ $resume_data = getResumeData();
                 <!-- Education -->
                 <div class="resume-section">
                     <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-                    <?php foreach ($about_data['education'] as $edu): ?>
+                    <?php 
+                    $education = $resume_data['education'] ?? [
+                        ['degree' => 'Bachelor of Computer Science', 'institution' => 'University Name', 'period' => '2016 - 2020', 'description' => 'Focused on software engineering and web development.']
+                    ];
+                    foreach ($education as $edu): ?>
                     <div class="resume-item">
                         <h4><?php echo htmlspecialchars($edu['degree']); ?></h4>
                         <p class="date" style="color: var(--primary-color); font-weight: 500;"><?php echo htmlspecialchars($edu['institution']); ?> | <?php echo htmlspecialchars($edu['period']); ?></p>
-                        <p style="color: var(--text-light);"><?php echo htmlspecialchars($edu['description']); ?></p>
+                        <p style="color: var(--text-light);"><?php echo htmlspecialchars($edu['description'] ?? ''); ?></p>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -116,7 +114,9 @@ $resume_data = getResumeData();
                 <div class="resume-section">
                     <h3><i class="fas fa-tools"></i> Technical Skills</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <?php foreach ($about_data['skills'] as $skill): ?>
+                        <?php 
+                        $skills = $resume_data['skills'] ?? ['PHP', 'MySQL', 'JavaScript', 'React', 'Node.js', 'HTML5', 'CSS3', 'Git'];
+                        foreach ($skills as $skill): ?>
                         <span style="background: var(--bg-light); padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; color: var(--text-dark); border: 1px solid var(--border-color);"><?php echo htmlspecialchars($skill); ?></span>
                         <?php endforeach; ?>
                     </div>
