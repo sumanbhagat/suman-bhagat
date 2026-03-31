@@ -9,9 +9,9 @@ $about_data = getAboutData();
     <div class="container">
         <div class="hero-content">
             <div class="hero-text">
-                <h1><?php echo htmlspecialchars($about_data['title']); ?></h1>
+                <h1><?php echo htmlspecialchars($site_settings['author_name'] ?? 'About Me'); ?></h1>
                 <p class="subtitle">Passionate Developer & Lifelong Learner</p>
-                <p><?php echo htmlspecialchars($about_data['content']); ?></p>
+                <p><?php echo htmlspecialchars($about_data['about_text'] ?? 'I\'m a passionate full-stack developer with expertise in creating beautiful, functional web applications.'); ?></p>
             </div>
         </div>
     </div>
@@ -40,8 +40,11 @@ $about_data = getAboutData();
                 <div class="skills">
                     <h4>Technical Skills</h4>
                     <div class="skill-tags">
-                        <?php foreach ($about_data['skills'] as $skill): ?>
-                        <span class="skill-tag"><?php echo htmlspecialchars($skill); ?></span>
+                        <?php 
+                        $skills = $about_data['skills'] ?? 'PHP, MySQL, JavaScript, HTML5, CSS3, React, Node.js';
+                        $skill_array = is_array($skills) ? $skills : explode(', ', $skills);
+                        foreach ($skill_array as $skill): ?>
+                        <span class="skill-tag"><?php echo htmlspecialchars(trim($skill)); ?></span>
                         <?php endforeach; ?>
                     </div>
                 </div>
