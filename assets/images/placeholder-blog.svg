@@ -1,0 +1,6 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="200" fill="#ec4899"/>
+  <text x="200" y="100" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">
+    Blog Post Image
+  </text>
+</svg>

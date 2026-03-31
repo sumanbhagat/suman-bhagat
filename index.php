@@ -70,7 +70,7 @@ $site_author = $site_settings['author_name'] ?? 'Suman Kumar Bhagat';
                 </div>
             </div>
             <div class="about-image">
-                <img src="assets/images/about.jpg" alt="About Me" onerror="this.src='https://via.placeholder.com/400x400/6366f1/ffffff?text=About+Me'">
+                <img src="assets/images/placeholder-about.svg" alt="About Me">
             </div>
         </div>
     </div>
@@ -183,7 +183,7 @@ document.addEventListener('keydown', (e) => {
         <div class="portfolio-grid">
             <div class="portfolio-item">
                 <div class="portfolio-image">
-                    <img src="assets/images/project1.jpg" alt="E-Commerce Platform" onerror="this.src='https://via.placeholder.com/400x250/6366f1/ffffff?text=E-Commerce+Platform'">
+                    <img src="assets/images/placeholder-project.svg" alt="E-Commerce Platform">
                     <div class="portfolio-overlay">
                         <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
                         <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
@@ -202,7 +202,7 @@ document.addEventListener('keydown', (e) => {
             
             <div class="portfolio-item">
                 <div class="portfolio-image">
-                    <img src="assets/images/project2.jpg" alt="Task Management App" onerror="this.src='https://via.placeholder.com/400x250/ec4899/ffffff?text=Task+Management'">
+                    <img src="assets/images/placeholder-project.svg" alt="Task Management App">
                     <div class="portfolio-overlay">
                         <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
                         <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
@@ -221,7 +221,7 @@ document.addEventListener('keydown', (e) => {
             
             <div class="portfolio-item">
                 <div class="portfolio-image">
-                    <img src="assets/images/project3.jpg" alt="Portfolio Website" onerror="this.src='https://via.placeholder.com/400x250/06b6d4/ffffff?text=Portfolio+Website'">
+                    <img src="assets/images/placeholder-project.svg" alt="Portfolio Website">
                     <div class="portfolio-overlay">
                         <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
                         <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
@@ -256,7 +256,7 @@ document.addEventListener('keydown', (e) => {
         <div class="blog-grid">
             <article class="blog-card">
                 <div class="blog-image">
-                    <img src="assets/images/blog1.jpg" alt="Web Development Trends" onerror="this.src='https://via.placeholder.com/400x200/6366f1/ffffff?text=Web+Dev+Trends'">
+                    <img src="assets/images/placeholder-blog.svg" alt="Web Development Trends">
                 </div>
                 <div class="blog-content">
                     <div class="blog-meta">
@@ -271,7 +271,7 @@ document.addEventListener('keydown', (e) => {
             
             <article class="blog-card">
                 <div class="blog-image">
-                    <img src="assets/images/blog2.jpg" alt="Design Principles" onerror="this.src='https://via.placeholder.com/400x200/ec4899/ffffff?text=Design+Principles'">
+                    <img src="assets/images/placeholder-blog.svg" alt="Design Principles">
                 </div>
                 <div class="blog-content">
                     <div class="blog-meta">
@@ -286,7 +286,7 @@ document.addEventListener('keydown', (e) => {
             
             <article class="blog-card">
                 <div class="blog-image">
-                    <img src="assets/images/blog3.jpg" alt="Coding Tips" onerror="this.src='https://via.placeholder.com/400x200/06b6d4/ffffff?text=Coding+Tips'">
+                    <img src="assets/images/placeholder-blog.svg" alt="Coding Tips">
                 </div>
                 <div class="blog-content">
                     <div class="blog-meta">

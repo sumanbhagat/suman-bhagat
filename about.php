@@ -25,7 +25,7 @@ $about_data = getAboutData();
                 <?php if (!empty($about_data['profile_image'])): ?>
                 <img src="<?php echo htmlspecialchars($about_data['profile_image']); ?>" alt="About Me" onerror="this.src='https://via.placeholder.com/500x600/6366f1/ffffff?text=About+Me'">
                 <?php else: ?>
-                <img src="assets/images/about.jpg" alt="About Me" onerror="this.src='https://via.placeholder.com/500x600/6366f1/ffffff?text=About+Me'">
+                <img src="assets/images/placeholder-about.svg" alt="About Me">
                 <?php endif; ?>
             </div>
             
