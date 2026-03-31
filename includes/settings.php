@@ -20,6 +20,12 @@ function getSiteSettings() {
     
     try {
         require_once __DIR__ . '/../admin/database/connection.php';
+        
+        // Check if database is connected
+        if (!isDatabaseConnected()) {
+            throw new Exception("Database not connected");
+        }
+        
         $db = getDB();
         
         // Create site_settings table if it doesn't exist
@@ -31,9 +37,41 @@ function getSiteSettings() {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         
-        // Insert default settings
-        $defaultSettings = [
-            'site_title' => 'Portfolio',
+        // Insert default settings if table is empty
+        $stmt = $db->query("SELECT COUNT(*) as count FROM site_settings");
+        $count = $stmt->fetch()['count'];
+        
+        if ($count == 0) {
+            $defaultSettings = [
+                'site_title' => 'My Portfolio',
+                'site_description' => 'Welcome to my portfolio website',
+                'author_name' => 'Suman Kumar Bhagat',
+                'author_email' => 'contact@example.com',
+                'author_phone' => '',
+                'site_url' => 'http://localhost/suman%20portfolio/'
+            ];
+            
+            foreach ($defaultSettings as $key => $value) {
+                $stmt = $db->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES (?, ?)");
+                $stmt->execute([$key, $value]);
+            }
+        }
+        
+        $stmt = $db->query("SELECT setting_key, setting_value FROM site_settings");
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $settings[$row['setting_key']] = $row['setting_value'];
+        }
+        
+        // Cache the settings
+        $GLOBALS['site_settings'] = $settings;
+        
+    } catch (Exception $e) {
+        // Database not available, use defaults and log error
+        error_log("Settings error: " . $e->getMessage());
+        
+        // Use hardcoded defaults as fallback
+        $settings = [
+            'site_title' => 'My Portfolio',
             'site_description' => 'Welcome to my portfolio website',
             'author_name' => 'Suman Kumar Bhagat',
             'author_email' => 'contact@example.com',
@@ -41,18 +79,7 @@ function getSiteSettings() {
             'site_url' => 'http://localhost/suman%20portfolio/'
         ];
         
-        foreach ($defaultSettings as $key => $value) {
-            $stmt = $db->prepare("INSERT IGNORE INTO site_settings (setting_key, setting_value) VALUES (?, ?)");
-            $stmt->execute([$key, $value]);
-        }
-        
-        $stmt = $db->query("SELECT setting_key, setting_value FROM site_settings");
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $settings[$row['setting_key']] = $row['setting_value'];
-        }
-    } catch (Exception $e) {
-        // Database not available, use defaults
-        error_log("Settings error: " . $e->getMessage());
+        $GLOBALS['site_settings'] = $settings;
     }
     
     // Set defaults if not present
