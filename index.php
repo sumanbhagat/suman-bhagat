@@ -4,8 +4,21 @@
 try {
     require_once 'admin/database/connection.php';
     
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
+    // Check if database is connected (with fallback)
+    $dbConnected = false;
+    if (function_exists('isDatabaseConnected')) {
+        $dbConnected = isDatabaseConnected();
+    } else {
+        // Fallback: try to get database connection
+        try {
+            $db = getDB();
+            $dbConnected = true;
+        } catch (Exception $e) {
+            $dbConnected = false;
+        }
+    }
+    
+    if (!$dbConnected) {
         throw new Exception("Database not connected");
     }
     

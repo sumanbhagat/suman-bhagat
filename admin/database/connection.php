@@ -180,4 +180,104 @@ class Database {
 function getDB() {
     return Database::getInstance()->getConnection();
 }
+
+/**
+ * Check database connection status
+ */
+function isDatabaseConnected() {
+    try {
+        $db = Database::getInstance();
+        return $db->isConnected();
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+/**
+ * Initialize database with default tables and data
+ */
+function initializeDatabase() {
+    try {
+        $db = Database::getInstance();
+        $pdo = $db->getConnection();
+        
+        // Create tables if they don't exist
+        $tables = [
+            "CREATE TABLE IF NOT EXISTS site_settings (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                setting_key VARCHAR(100) UNIQUE NOT NULL,
+                setting_value TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )",
+            
+            "CREATE TABLE IF NOT EXISTS hero_slides (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                subtitle VARCHAR(255),
+                description TEXT,
+                image_path VARCHAR(500),
+                button1_text VARCHAR(100),
+                button1_url VARCHAR(500),
+                button2_text VARCHAR(100),
+                button2_url VARCHAR(500),
+                slide_order INT DEFAULT 0,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )",
+            
+            "CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(50) UNIQUE NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                password_hash VARCHAR(255) NOT NULL,
+                full_name VARCHAR(100),
+                role ENUM('admin', 'user') DEFAULT 'user',
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_login TIMESTAMP NULL
+            )"
+        ];
+        
+        foreach ($tables as $sql) {
+            $pdo->exec($sql);
+        }
+        
+        // Insert default data
+        $defaultSettings = [
+            ['site_title', 'My Portfolio'],
+            ['author_name', 'Suman Kumar Bhagat'],
+            ['author_email', 'suman@example.com'],
+            ['site_url', 'http://localhost/suman%20portfolio/']
+        ];
+        
+        foreach ($defaultSettings as $setting) {
+            $stmt = $pdo->prepare("INSERT IGNORE INTO site_settings (setting_key, setting_value) VALUES (?, ?)");
+            $stmt->execute($setting);
+        }
+        
+        // Create default admin user
+        $adminPassword = password_hash('admin123', PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("INSERT IGNORE INTO users (username, email, password_hash, full_name, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute(['admin', 'admin@portfolio.com', $adminPassword, 'Administrator', 'admin']);
+        
+        // Create default hero slide
+        $stmt = $pdo->prepare("INSERT IGNORE INTO hero_slides (title, subtitle, description, button1_text, button1_url, slide_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            'Welcome to My Portfolio',
+            'Full Stack Developer & Designer',
+            'Creating beautiful and functional web experiences with modern technologies.',
+            'View My Work',
+            'portfolio',
+            1,
+            true
+        ]);
+        
+        return true;
+        
+    } catch (Exception $e) {
+        error_log("Database initialization failed: " . $e->getMessage());
+        return false;
+    }
+}
 ?>
