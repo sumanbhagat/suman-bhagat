@@ -5,8 +5,8 @@
  */
 
 // Try simple settings first for maximum compatibility
-if (file_exists(__DIR__ . '/simple-settings.php')) {
-    require_once __DIR__ . '/simple-settings.php';
+if (file_exists(__DIR__ . '/simple-db.php')) {
+    require_once __DIR__ . '/simple-db.php';
 } else {
     // Fallback to original
     require_once __DIR__ . '/database-helper.php';
