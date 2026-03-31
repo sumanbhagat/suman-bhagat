@@ -14,19 +14,28 @@ class Database {
 
     private function __construct() {
         try {
-            $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset={$this->charset}";
+            // First try to connect without database to create it if needed
+            $dsn = "mysql:host={$this->host};charset={$this->charset}";
             
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$this->charset} COLLATE utf8mb4_unicode_ci"
             ];
 
+            // Connect to MySQL server
             $this->connection = new PDO($dsn, $this->username, $this->password, $options);
+            
+            // Create database if not exists
+            $this->connection->exec("CREATE DATABASE IF NOT EXISTS {$this->db_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            
+            // Connect to the database
+            $this->connection->exec("USE {$this->db_name}");
+            $this->connection->exec("SET NAMES {$this->charset} COLLATE utf8mb4_unicode_ci");
+            
         } catch (PDOException $e) {
             error_log("Database connection error: " . $e->getMessage());
-            throw new Exception("Database connection failed. Please try again later.");
+            throw new Exception("Database connection failed. Please make sure MySQL is running in XAMPP. Error: " . $e->getMessage());
         }
     }
 
