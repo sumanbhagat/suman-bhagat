@@ -54,13 +54,18 @@ RewriteRule ^backend/admin/includes/ - [F,L]
 RewriteRule ^backend/admin/database/ - [F,L]
 
 # Clean URL Rewriting
-# Route frontend pages to frontend directory
+# Route clean URLs to PHP files in root
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^/]+)/?$ frontend/$1.php [L,QSA]
+RewriteRule ^about/?$ about.php [L,QSA]
+RewriteRule ^portfolio/?$ portfolio.php [L,QSA]
+RewriteRule ^blog/?$ blog.php [L,QSA]
+RewriteRule ^contact/?$ contact.php [L,QSA]
+RewriteRule ^gallery/?$ gallery.php [L,QSA]
+RewriteRule ^resume/?$ resume.php [L,QSA]
 
-# Route admin pages to backend directory
-RewriteRule ^admin/(.*)$ backend/admin/$1 [L,QSA]
+# Route admin pages to admin directory
+RewriteRule ^admin/(.*)$ admin/$1 [L,QSA]
 
 # Blog post with slug (optional enhancement)
 # RewriteRule ^blog/([^/]+)/?$ blog.php?slug=$1 [L,QSA]
@@ -73,12 +78,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ /$1 [R=301,L]
 
 # Force HTTPS (uncomment if SSL is enabled)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # Custom error pages
-ErrorDocument 404 /school/portfolio/frontend/404.php
-ErrorDocument 403 /school/portfolio/frontend/403.php
+ErrorDocument 404 /suman%20portfolio/404.php
+ErrorDocument 403 /suman%20portfolio/403.php
 
 # PHP settings (if mod_php is used)
 <IfModule mod_php.c>
