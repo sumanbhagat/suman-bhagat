@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; 
 
-// Load about data from database
+// Load about data using universal database helper
 $about_data = getAboutData();
 ?>
 

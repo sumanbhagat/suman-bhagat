@@ -1,131 +1,22 @@
 <?php
 /**
- * Frontend Settings Helper
- * Loads site settings from database for frontend pages
+ * Frontend Settings Helper - Universal Database Integration
+ * Loads site settings from database for all frontend pages
  */
 
-// Global settings cache
-$GLOBALS['site_settings'] = null;
+// Include universal database helper
+require_once __DIR__ . '/database-helper.php';
 
 /**
  * Get all site settings as an associative array
  * @return array
  */
 function getSiteSettings() {
-    if ($GLOBALS['site_settings'] !== null) {
-        return $GLOBALS['site_settings'];
-    }
-    
-    $settings = [];
-    
-    try {
-        require_once __DIR__ . '/../admin/database/connection.php';
-        
-        // Check if database is connected (with fallback)
-        $dbConnected = false;
-        if (function_exists('isDatabaseConnected')) {
-            $dbConnected = isDatabaseConnected();
-        } else {
-            // Fallback: try to get database connection
-            try {
-                $db = getDB();
-                $dbConnected = true;
-            } catch (Exception $e) {
-                $dbConnected = false;
-            }
-        }
-        
-        if (!$dbConnected) {
-            throw new Exception("Database not connected");
-        }
-        
-        $db = getDB();
-        
-        // Create site_settings table if it doesn't exist
-        $db->exec("CREATE TABLE IF NOT EXISTS site_settings (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            setting_key VARCHAR(100) UNIQUE NOT NULL,
-            setting_value TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        
-        // Insert default settings if table is empty
-        $stmt = $db->query("SELECT COUNT(*) as count FROM site_settings");
-        $count = $stmt->fetch()['count'];
-        
-        if ($count == 0) {
-            $defaultSettings = [
-                'site_title' => 'My Portfolio',
-                'site_description' => 'Welcome to my portfolio website',
-                'author_name' => 'Suman Kumar Bhagat',
-                'author_email' => 'contact@example.com',
-                'author_phone' => '',
-                'site_url' => 'http://localhost/suman%20portfolio/'
-            ];
-            
-            foreach ($defaultSettings as $key => $value) {
-                $stmt = $db->prepare("INSERT INTO site_settings (setting_key, setting_value) VALUES (?, ?)");
-                $stmt->execute([$key, $value]);
-            }
-        }
-        
-        $stmt = $db->query("SELECT setting_key, setting_value FROM site_settings");
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $settings[$row['setting_key']] = $row['setting_value'];
-        }
-        
-        // Cache the settings
-        $GLOBALS['site_settings'] = $settings;
-        
-    } catch (Exception $e) {
-        // Database not available, use defaults and log error
-        error_log("Settings error: " . $e->getMessage());
-        
-        // Use hardcoded defaults as fallback
-        $settings = [
-            'site_title' => 'My Portfolio',
-            'site_description' => 'Welcome to my portfolio website',
-            'author_name' => 'Suman Kumar Bhagat',
-            'author_email' => 'contact@example.com',
-            'author_phone' => '',
-            'site_url' => 'http://localhost/suman%20portfolio/'
-        ];
-        
-        $GLOBALS['site_settings'] = $settings;
-    }
-    
-    // Set defaults if not present
-    $defaults = [
-        'site_title' => 'Portfolio',
-        'site_description' => 'Welcome to my portfolio website',
-        'site_author' => 'Suman Kumar Bhagat',
-        'author_name' => 'Suman Kumar Bhagat',
-        'author_email' => 'contact@example.com',
-        'author_phone' => '',
-        'contact_address' => '',
-        'social_github' => '',
-        'social_linkedin' => '',
-        'social_twitter' => '',
-        'social_instagram' => '',
-        'footer_copyright' => date('Y') . ' All rights reserved.',
-        'blog_title' => 'My Blog',
-        'blog_subtitle' => 'Thoughts, Ideas & Knowledge Sharing',
-        'blog_description' => 'Welcome to my digital notebook where I share insights about web development, design, technology trends, and lessons learned from my journey.'
-    ];
-    
-    foreach ($defaults as $key => $value) {
-        if (!isset($settings[$key]) || empty($settings[$key])) {
-            $settings[$key] = $value;
-        }
-    }
-    
-    $GLOBALS['site_settings'] = $settings;
-    return $settings;
+    return getSiteSettingsSafe();
 }
 
 /**
- * Get a specific setting value
+ * Get specific setting value
  * @param string $key
  * @param string $default
  * @return string
@@ -136,116 +27,232 @@ function getSetting($key, $default = '') {
 }
 
 /**
- * Get dynamic contact information with fallbacks
- * @param string $type
+ * Get hero slides for homepage
  * @return array
  */
-function getContactInfo($type = '') {
-    $settings = getSiteSettings();
-    
-    $contact = [
-        'email' => [
-            'value' => !empty($settings['author_email']) ? $settings['author_email'] : 'contact@example.com',
-            'link' => 'mailto:' . (!empty($settings['author_email']) ? $settings['author_email'] : 'contact@example.com'),
-            'display' => !empty($settings['author_email']) ? $settings['author_email'] : 'contact@example.com'
-        ],
-        'phone' => [
-            'value' => !empty($settings['author_phone']) ? $settings['author_phone'] : '+1 (555) 123-4567',
-            'link' => 'tel:' . preg_replace('/[^0-9+]/', '', !empty($settings['author_phone']) ? $settings['author_phone'] : '+15551234567'),
-            'display' => !empty($settings['author_phone']) ? $settings['author_phone'] : '+1 (555) 123-4567'
-        ],
-        'address' => [
-            'value' => !empty($settings['contact_address']) ? $settings['contact_address'] : "Gauradaha-2,Jhapa, Nepal",
-            'link' => 'https://maps.google.com/?q=' . urlencode(!empty($settings['contact_address']) ? $settings['contact_address'] : 'San Francisco, CA'),
-            'display' => !empty($settings['contact_address']) ? $settings['contact_address'] : "Gauradaha-2,Jhapa, Nepal"
-        ]
-    ];
-    
-    return $type ? ($contact[$type] ?? []) : $contact;
+function getHeroSlides() {
+    return getHeroSlidesSafe();
 }
 
 /**
- * Get About Me page data
+ * Get about page data
  * @return array
  */
 function getAboutData() {
-    static $about_data = null;
+    $pdo = getDatabaseConnection();
     
-    if ($about_data === null) {
+    if ($pdo) {
         try {
-            require_once __DIR__ . '/../admin/database/connection.php';
-            $db = getDB();
-            
-            $stmt = $db->prepare("SELECT * FROM about_me WHERE id = 1");
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Try to get about data from database
+            $stmt = $pdo->query("SELECT * FROM about_data WHERE is_active = 1 LIMIT 1");
+            $data = $stmt->fetch();
             
             if ($data) {
-                $about_data = [
-                    'title' => $data['title'],
-                    'content' => $data['content'],
-                    'profile_image' => $data['profile_image'],
-                    'skills' => json_decode($data['skills_json'] ?? '[]', true) ?? [],
-                    'experience' => json_decode($data['experience_json'] ?? '[]', true) ?? [],
-                    'education' => json_decode($data['education_json'] ?? '[]', true) ?? []
-                ];
+                return $data;
             }
-        } catch (Exception $e) {
-            // Fallback data
-            $about_data = [
-                'title' => 'About Me',
-                'content' => 'I am a passionate Full Stack Developer with expertise in creating amazing digital experiences.',
-                'profile_image' => '',
-                'skills' => ['PHP', 'JavaScript', 'HTML/CSS', 'MySQL'],
-                'experience' => [],
-                'education' => []
-            ];
+        } catch (PDOException $e) {
+            error_log("About data query error: " . $e->getMessage());
         }
     }
     
-    return $about_data;
+    // Return default about data
+    return [
+        'profile_image' => 'assets/images/placeholder-about.svg',
+        'about_text' => 'I\'m a passionate full-stack developer with expertise in creating beautiful, functional web applications. I combine technical skills with creative design to deliver exceptional digital experiences.',
+        'skills' => 'PHP, MySQL, JavaScript, HTML5, CSS3, React, Node.js',
+        'experience' => '5+ years',
+        'projects_completed' => '50+',
+        'happy_clients' => '30+'
+    ];
 }
 
 /**
- * Get Resume page data
+ * Get resume data
  * @return array
  */
 function getResumeData() {
-    static $resume_data = null;
+    $pdo = getDatabaseConnection();
     
-    if ($resume_data === null) {
+    if ($pdo) {
         try {
-            require_once __DIR__ . '/../admin/database/connection.php';
-            $db = getDB();
-            
-            $stmt = $db->prepare("SELECT * FROM resume_content WHERE id = 1");
-            $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $pdo->query("SELECT * FROM resume_data WHERE is_active = 1 LIMIT 1");
+            $data = $stmt->fetch();
             
             if ($data) {
-                $resume_data = [
-                    'hero_title' => $data['hero_title'],
-                    'hero_subtitle' => $data['hero_subtitle'],
-                    'hero_bio' => $data['hero_bio'],
-                    'hero_image' => $data['hero_image'],
-                    'profile_photo' => $data['profile_photo'],
-                    'certifications' => json_decode($data['certifications_json'] ?? '[]', true) ?? [],
-                    'resume_file' => $data['resume_file'] ?? ''
-                ];
+                return $data;
             }
-        } catch (Exception $e) {
-            // Fallback data
-            $resume_data = [
-                'hero_title' => 'My Resume',
-                'hero_subtitle' => 'Professional Experience & Qualifications',
-                'hero_bio' => 'Download my full resume or view my qualifications below.',
-                'hero_image' => '',
-                'profile_photo' => '',
-                'certifications' => [],
-                'resume_file' => ''
-            ];
+        } catch (PDOException $e) {
+            error_log("Resume data query error: " . $e->getMessage());
         }
     }
     
-    return $resume_data;
+    // Return default resume data
+    return [
+        'full_name' => 'Suman Kumar Bhagat',
+        'title' => 'Full Stack Developer',
+        'email' => 'suman@example.com',
+        'phone' => '+1 (555) 123-4567',
+        'location' => 'Your City, Country',
+        'summary' => 'Experienced full-stack developer with expertise in modern web technologies and a passion for creating exceptional digital experiences.',
+        'experience' => [
+            [
+                'title' => 'Senior Full Stack Developer',
+                'company' => 'Tech Company',
+                'period' => '2020 - Present',
+                'description' => 'Lead development of web applications and API integrations.'
+            ]
+        ],
+        'education' => [
+            [
+                'degree' => 'Bachelor of Computer Science',
+                'school' => 'University Name',
+                'period' => '2016 - 2020'
+            ]
+        ],
+        'skills' => [
+            'PHP', 'MySQL', 'JavaScript', 'React', 'Node.js', 'HTML5', 'CSS3', 'Git'
+        ]
+    ];
 }
+
+/**
+ * Get blog posts
+ * @param int $limit
+ * @return array
+ */
+function getBlogPosts($limit = 6) {
+    $pdo = getDatabaseConnection();
+    
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE status = 'published' ORDER BY created_at DESC LIMIT ?");
+            $stmt->execute([$limit]);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("Blog posts query error: " . $e->getMessage());
+        }
+    }
+    
+    // Return default blog posts
+    return [
+        [
+            'id' => 1,
+            'title' => 'Welcome to My Portfolio',
+            'slug' => 'welcome-to-my-portfolio',
+            'excerpt' => 'This is my first blog post on my new portfolio website.',
+            'featured_image' => 'assets/images/placeholder-blog.svg',
+            'category' => 'Announcement',
+            'created_at' => date('Y-m-d H:i:s')
+        ]
+    ];
+}
+
+/**
+ * Get portfolio projects
+ * @return array
+ */
+function getPortfolioProjects() {
+    $pdo = getDatabaseConnection();
+    
+    if ($pdo) {
+        try {
+            $stmt = $pdo->query("SELECT * FROM portfolio_projects WHERE status = 'active' ORDER BY created_at DESC");
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("Portfolio projects query error: " . $e->getMessage());
+        }
+    }
+    
+    // Return default projects
+    return [
+        [
+            'id' => 1,
+            'title' => 'Portfolio Website',
+            'slug' => 'portfolio-website',
+            'description' => 'A responsive portfolio website built with PHP, MySQL, and modern CSS/JavaScript.',
+            'featured_image' => 'assets/images/placeholder-project.svg',
+            'technologies' => json_encode(['PHP', 'MySQL', 'HTML5', 'CSS3', 'JavaScript']),
+            'created_at' => date('Y-m-d H:i:s')
+        ]
+    ];
+}
+
+/**
+ * Get gallery images
+ * @param string $category
+ * @return array
+ */
+function getGalleryImages($category = '') {
+    $pdo = getDatabaseConnection();
+    
+    if ($pdo) {
+        try {
+            if ($category) {
+                $stmt = $pdo->prepare("SELECT * FROM gallery_images WHERE category = ? AND is_active = 1 ORDER BY created_at DESC");
+                $stmt->execute([$category]);
+            } else {
+                $stmt = $pdo->query("SELECT * FROM gallery_images WHERE is_active = 1 ORDER BY created_at DESC");
+            }
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("Gallery images query error: " . $e->getMessage());
+        }
+    }
+    
+    // Return default gallery images
+    return [
+        [
+            'id' => 1,
+            'title' => 'Sample Image',
+            'description' => 'A sample gallery image',
+            'image_path' => 'assets/images/placeholder-project.svg',
+            'category' => 'general'
+        ]
+    ];
+}
+
+/**
+ * Save contact message
+ * @param array $data
+ * @return bool
+ */
+function saveContactMessage($data) {
+    $pdo = getDatabaseConnection();
+    
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)");
+            return $stmt->execute([
+                $data['name'],
+                $data['email'],
+                $data['subject'],
+                $data['message']
+            ]);
+        } catch (PDOException $e) {
+            error_log("Contact message save error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * Get contact messages
+ * @return array
+ */
+function getContactMessages() {
+    $pdo = getDatabaseConnection();
+    
+    if ($pdo) {
+        try {
+            $stmt = $pdo->query("SELECT * FROM contact_messages ORDER BY created_at DESC");
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("Contact messages query error: " . $e->getMessage());
+        }
+    }
+    
+    return [];
+}
+?>

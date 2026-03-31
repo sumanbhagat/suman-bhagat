@@ -1,42 +1,27 @@
 <?php include 'includes/header.php'; ?>
 
 <?php
-require_once 'admin/database/connection.php';
-
-$db = getDB();
-
-// Get active portfolio projects
-$stmt = $db->prepare("SELECT * FROM portfolio_projects WHERE status = 'active' ORDER BY display_order ASC, created_at DESC");
-$stmt->execute();
-$projects = $stmt->fetchAll();
-
-// Parse technologies JSON
-foreach ($projects as &$project) {
-    $project['technologies'] = json_decode($project['technologies'] ?? '[]', true);
-}
+// Get portfolio projects using universal database helper
+$projects = getPortfolioProjects();
 ?>
+$projects = $stmt->fetchAll();
 
 <!-- Portfolio Hero -->
 <section class="hero" style="min-height: 50vh;">
     <div class="container">
         <div class="hero-content">
             <div class="hero-text">
-                <h1>My <span>Portfolio</span></h1>
-                <p class="subtitle">Showcasing My Best Work</p>
-                <p>A collection of projects I've worked on, from web applications to mobile apps and everything in between.</p>
+                <h1>My Portfolio</h1>
+                <p class="subtitle">Projects I've Worked On</p>
+                <p>A collection of my recent work, showcasing my skills in web development, design, and problem-solving. Each project represents a unique challenge and learning experience.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Portfolio Filter -->
-<section class="portfolio-section" style="padding-top: 0;">
+<!-- Portfolio Grid -->
+<section class="portfolio-section">
     <div class="container">
-        <div class="section-header">
-            <h2>Featured <span>Projects</span></h2>
-            <p>Click on any project to learn more</p>
-        </div>
-        
         <div class="portfolio-grid">
             <?php foreach ($projects as $project): ?>
             <div class="portfolio-item">
