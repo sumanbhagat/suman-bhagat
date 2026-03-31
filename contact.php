@@ -1,4 +1,3 @@
-<?php include '../backend/config.php'; ?>
 <?php include 'includes/header.php'; 
 
 // Load site settings for contact page
@@ -6,8 +5,8 @@ $site_settings = getSiteSettings();
 ?>
 
 <?php
-require_once '../backend/admin/database/connection.php';
-require_once '../backend/admin/includes/security.php';
+require_once 'admin/database/connection.php';
+require_once 'admin/includes/security.php';
 
 $db = getDB();
 $success_message = '';

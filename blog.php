@@ -1,8 +1,7 @@
-<?php include '../backend/config.php'; ?>
 <?php include 'includes/header.php'; ?>
 
 <?php
-require_once '../backend/admin/database/connection.php';
+require_once 'admin/database/connection.php';
 
 $db = getDB();
 

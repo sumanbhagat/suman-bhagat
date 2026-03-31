@@ -19,7 +19,7 @@ function getSiteSettings() {
     $settings = [];
     
     try {
-        require_once __DIR__ . '/../../backend/admin/database/connection.php';
+        require_once __DIR__ . '/../admin/database/connection.php';
         $db = getDB();
         
         $stmt = $db->query("SELECT setting_key, setting_value FROM site_settings");

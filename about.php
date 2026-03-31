@@ -1,4 +1,3 @@
-<?php include '../backend/config.php'; ?>
 <?php include 'includes/header.php'; 
 
 // Load about data from database

@@ -1,11 +1,12 @@
 <?php 
-require_once 'api-settings.php';
+require_once 'config.php'; 
+require_once 'settings.php';
 require_once 'router.php';
 
-// Load site settings from API
+// Load site settings from database
 $site_settings = getSiteSettings();
-$site_title = $site_settings['site_title'] ?? 'My Portfolio';
-$site_author = $site_settings['author_name'] ?? 'John Doe';
+$site_title = $site_settings['site_title'] ?? SITE_NAME;
+$site_author = $site_settings['author_name'] ?? AUTHOR_NAME;
 ?>
 <!DOCTYPE html>
 <html lang="en">
