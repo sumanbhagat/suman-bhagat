@@ -1,6 +1,6 @@
 # Enable rewrite engine
 RewriteEngine On
-RewriteBase /school/portfolio/
+RewriteBase /suman%20portfolio/
 
 # Disable directory browsing
 Options -Indexes

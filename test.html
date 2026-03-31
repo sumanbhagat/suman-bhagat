@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>HTML Test Page</h1>
+    <p>If you can see this, XAMPP is working!</p>
+    <p>Current URL: <span id="url"></span></p>
+    <p>Timestamp: <span id="time"></span></p>
+    
+    <h2>Quick Links</h2>
+    <ul>
+        <li><a href="index.php">Homepage (PHP)</a></li>
+        <li><a href="test.php">PHP Test</a></li>
+        <li><a href="admin/">Admin Panel</a></li>
+        <li><a href="about.php">About Page</a></li>
+        <li><a href="contact.php">Contact Page</a></li>
+    </ul>
+    
+    <h2>File Structure Test</h2>
+    <ul>
+        <li><a href="assets/css/style.css">CSS File</a></li>
+        <li><a href="assets/js/main.js">JS File</a></li>
+        <li><a href="assets/images/about.jpg">About Image</a></li>
+    </ul>
+    
+    <script>
+        document.getElementById('url').textContent = window.location.href;
+        document.getElementById('time').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>
