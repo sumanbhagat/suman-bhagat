@@ -20,20 +20,8 @@
       "dest": "/api/admin/$1"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/frontend/assets/$1"
-    },
-    {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2))",
-      "dest": "/frontend/assets/$1"
-    },
-    {
-      "src": "/(.*\\.(php))",
-      "dest": "/frontend/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/index.php"
+      "dest": "/frontend/$1"
     }
   ]
 }
