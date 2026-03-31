@@ -1,0 +1,44 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "Professional portfolio website with frontend/backend separation",
+  "main": "index.php",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Building for production...' && npm run optimize-assets && npm run validate-php",
+    "deploy": "vercel --prod",
+    "optimize-assets": "echo 'Optimizing assets...' && find frontend/assets -name '*.css' -exec cssnano {} \\; 2>/dev/null || true",
+    "validate-php": "echo 'Validating PHP files...' && find frontend api -name '*.php' -exec php -l {} \\;",
+    "test": "npm run validate-php",
+    "setup": "echo 'Setting up environment...' && cp .env.example .env",
+    "local": "php -S localhost:8000 index.php"
+  },
+  "keywords": [
+    "portfolio",
+    "php",
+    "vercel",
+    "serverless",
+    "frontend",
+    "backend"
+  ],
+  "author": "Suman Kumar Bhagat",
+  "license": "MIT",
+  "devDependencies": {
+    "@vercel/node": "^3.0.0",
+    "cssnano": "^6.0.0"
+  },
+  "dependencies": {
+    "resend": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/portfolio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/portfolio/issues"
+  },
+  "homepage": "https://github.com/yourusername/portfolio#readme"
+}

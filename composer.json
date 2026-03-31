@@ -1,0 +1,31 @@
+{
+    "name": "suman-portfolio/website",
+    "description": "Professional portfolio website",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "resend/resend": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Portfolio\\": "api/includes/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "find api frontend -name '*.php' -exec php -l {} \\;",
+        "deploy": "vercel --prod"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

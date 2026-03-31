@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.php",
+      "use": "@vercel/php"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/api/admin/$1"
+    },
+    {
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2))",
+      "dest": "/frontend/assets/$1"
+    },
+    {
+      "src": "/(.*\\.(php))",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/index.php"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "SITE_NAME": "My Portfolio",
+    "SITE_URL": "https://your-vercel-app.vercel.app"
+  },
+  "functions": {
+    "api/**/*.php": {
+      "runtime": "php"
+    }
+  }
+}
