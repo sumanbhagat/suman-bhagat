@@ -1,67 +1,15 @@
 {
   "version": 2,
-  "name": "portfolio-website",
   "builds": [
     {
-      "src": "frontend/index.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/about.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/contact.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/portfolio.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/blog.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/gallery.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/resume.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "api/**/*.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "frontend/assets/**/*",
+      "src": "frontend/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/api/admin/$1"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/frontend/assets/$1"
-    },
-    {
-      "src": "/(index|about|contact|portfolio|blog|gallery|resume)\\.php",
-      "dest": "/frontend/$1.php"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/index.php"
+      "dest": "/frontend/$1"
     }
-  ],
-  "env": {
-    "VERCEL_ENV": "production"
-  }
+  ]
 }

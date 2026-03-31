@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional portfolio website">
+    <title>Suman Kumar Bhagat - My Portfolio</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/slider.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1>Suman Kumar Bhagat</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                    <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                    <li><a href="resume.html" class="nav-link">Resume</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Slider Section -->
+    <section class="hero-slider">
+        <!-- Slide 1 -->
+        <div class="slide slide-1 active">
+            <div class="slide-bg"></div>
+            <div class="slide-overlay"></div>
+            <div class="container">
+                <div class="slide-content">
+                    <h1>Welcome to My Portfolio</h1>
+                    <p class="subtitle">Web Developer & Designer</p>
+                    <p>Creating beautiful and functional web experiences with modern technologies.</p>
+                    <div class="hero-buttons">
+                        <a href="portfolio.html" class="btn btn-primary">View My Work</a>
+                        <a href="contact.html" class="btn btn-secondary">Contact Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="slider-prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="slider-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+            </div>
+            <button class="slider-next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Me</h2>
+                    <p>I'm a passionate full-stack developer with expertise in creating beautiful, functional web applications. I combine technical skills with creative design to deliver exceptional digital experiences.</p>
+                    <p>With years of experience in modern web technologies, I help businesses and individuals bring their ideas to life through clean code and stunning design.</p>
+                    <div class="about-buttons">
+                        <a href="about.html" class="btn btn-primary">Learn More</a>
+                        <a href="portfolio.html" class="btn btn-secondary">View Work</a>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="assets/images/about.jpg" alt="About Me" onerror="this.src='https://via.placeholder.com/400x400/6366f1/ffffff?text=About+Me'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Slider -->
+    <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        if (index >= 0 && index < totalSlides) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+    }
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide >= totalSlides) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = totalSlides - 1;
+        showSlide(currentSlide);
+    }
+
+    function goToSlide(index) {
+        showSlide(index);
+    }
+
+    // Initialize slider
+    document.addEventListener('DOMContentLoaded', function() {
+        if (totalSlides > 0) {
+            showSlide(0);
+        }
+    });
+
+    // Mobile menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+    </script>
+
+    <!-- Highlights Section -->
+    <section class="highlights">
+        <div class="container">
+            <div class="section-header">
+                <h2>What I <span>Do</span></h2>
+                <p>Bringing ideas to life through code and creativity</p>
+            </div>
+            
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development</h3>
+                    <p>Building responsive, fast, and secure websites using modern technologies and best practices.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-palette"></i>
+                    <h3>UI/UX Design</h3>
+                    <p>Creating intuitive and visually appealing user interfaces that enhance user experience.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Apps</h3>
+                    <p>Developing cross-platform mobile applications that work seamlessly on all devices.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Digital Strategy</h3>
+                    <p>Helping businesses grow with effective digital solutions and marketing strategies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Portfolio Section -->
+    <section class="featured-portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured <span>Projects</span></h2>
+                <p>Some of my recent work</p>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="assets/images/project1.jpg" alt="E-Commerce Platform" onerror="this.src='https://via.placeholder.com/400x250/6366f1/ffffff?text=E-Commerce+Platform'">
+                        <div class="portfolio-overlay">
+                            <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>E-Commerce Platform</h3>
+                        <p>A full-featured online shopping platform with payment integration.</p>
+                        <div class="portfolio-tags">
+                            <span>PHP</span>
+                            <span>MySQL</span>
+                            <span>JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="assets/images/project2.jpg" alt="Task Management App" onerror="this.src='https://via.placeholder.com/400x250/ec4899/ffffff?text=Task+Management'">
+                        <div class="portfolio-overlay">
+                            <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Task Management App</h3>
+                        <p>Collaborative project management tool for remote teams.</p>
+                        <div class="portfolio-tags">
+                            <span>React</span>
+                            <span>Node.js</span>
+                            <span>MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="assets/images/project3.jpg" alt="Portfolio Website" onerror="this.src='https://via.placeholder.com/400x250/06b6d4/ffffff?text=Portfolio+Website'">
+                        <div class="portfolio-overlay">
+                            <a href="#" aria-label="View Project"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="View Code"><i class="fas fa-code"></i></a>
+                        </div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Portfolio Website</h3>
+                        <p>Creative portfolio website for a professional photographer.</p>
+                        <div class="portfolio-tags">
+                            <span>HTML/CSS</span>
+                            <span>JavaScript</span>
+                            <span>Animation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="portfolio.html" class="btn btn-secondary">View All Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Blog Posts -->
+    <section class="recent-blog">
+        <div class="container">
+            <div class="section-header">
+                <h2>Latest from <span>Blog</span></h2>
+                <p>Thoughts, ideas, and knowledge sharing</p>
+            </div>
+            
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="assets/images/blog1.jpg" alt="Web Development Trends" onerror="this.src='https://via.placeholder.com/400x200/6366f1/ffffff?text=Web+Dev+Trends'">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> March 10, 2026</span>
+                            <span><i class="far fa-clock"></i> 5 min read</span>
+                        </div>
+                        <h3>Top Web Development Trends in 2026</h3>
+                        <p>Exploring the latest technologies and frameworks shaping the future of web development.</p>
+                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="assets/images/blog2.jpg" alt="Design Principles" onerror="this.src='https://via.placeholder.com/400x200/ec4899/ffffff?text=Design+Principles'">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> March 5, 2026</span>
+                            <span><i class="far fa-clock"></i> 4 min read</span>
+                        </div>
+                        <h3>Essential UI/UX Design Principles</h3>
+                        <p>Key principles every designer should know to create user-friendly interfaces.</p>
+                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="assets/images/blog3.jpg" alt="Coding Tips" onerror="this.src='https://via.placeholder.com/400x200/06b6d4/ffffff?text=Coding+Tips'">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="far fa-calendar"></i> February 28, 2026</span>
+                            <span><i class="far fa-clock"></i> 6 min read</span>
+                        </div>
+                        <h3>10 Tips for Writing Clean Code</h3>
+                        <p>Best practices to make your code more readable, maintainable, and efficient.</p>
+                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); padding: 80px 0; text-align: center; color: white;">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Let's Work Together</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">Have a project in mind? I'd love to hear about it.</p>
+            <a href="contact.html" class="btn" style="background: white; color: var(--primary-color);">Start a Conversation</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Suman Kumar Bhagat</h3>
+                    <p>Full-stack developer passionate about creating amazing web experiences.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Suman Kumar Bhagat. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
