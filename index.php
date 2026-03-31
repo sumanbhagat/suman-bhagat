@@ -4,8 +4,58 @@
 require_once 'admin/database/connection.php';
 $db = getDB();
 
-$stmt = $db->query("SELECT * FROM hero_slides WHERE is_active = 1 ORDER BY slide_order ASC, id ASC");
-$slides = $stmt->fetchAll();
+try {
+    $stmt = $db->query("SELECT * FROM hero_slides WHERE is_active = 1 ORDER BY slide_order ASC, id ASC");
+    $slides = $stmt->fetchAll();
+} catch (Exception $e) {
+    // Create hero_slides table if it doesn't exist
+    try {
+        $db->exec("CREATE TABLE IF NOT EXISTS hero_slides (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            subtitle VARCHAR(255),
+            description TEXT,
+            image_path VARCHAR(500),
+            button1_text VARCHAR(100),
+            button1_url VARCHAR(500),
+            button2_text VARCHAR(100),
+            button2_url VARCHAR(500),
+            slide_order INT DEFAULT 0,
+            is_active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        
+        // Insert default slide
+        $stmt = $db->prepare("INSERT INTO hero_slides (title, subtitle, description, button1_text, button1_url, slide_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            'Welcome to My Portfolio',
+            'Full Stack Developer & Designer',
+            'Creating beautiful and functional web experiences with modern technologies.',
+            'View My Work',
+            'portfolio',
+            1,
+            true
+        ]);
+        
+        // Try query again
+        $stmt = $db->query("SELECT * FROM hero_slides WHERE is_active = 1 ORDER BY slide_order ASC, id ASC");
+        $slides = $stmt->fetchAll();
+    } catch (Exception $e2) {
+        // If still fails, use default slide
+        $slides = [
+            [
+                'title' => 'Welcome to My Portfolio',
+                'subtitle' => 'Full Stack Developer & Designer',
+                'description' => 'Creating beautiful and functional web experiences with modern technologies.',
+                'button1_text' => 'View My Work',
+                'button1_url' => 'portfolio',
+                'button2_text' => 'Contact Me',
+                'button2_url' => 'contact',
+                'image_path' => ''
+            ]
+        ];
+    }
+}
 
 // Load site settings for this page
 $site_settings = getSiteSettings();

@@ -22,12 +22,37 @@ function getSiteSettings() {
         require_once __DIR__ . '/../admin/database/connection.php';
         $db = getDB();
         
+        // Create site_settings table if it doesn't exist
+        $db->exec("CREATE TABLE IF NOT EXISTS site_settings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            setting_key VARCHAR(100) UNIQUE NOT NULL,
+            setting_value TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        
+        // Insert default settings
+        $defaultSettings = [
+            'site_title' => 'Portfolio',
+            'site_description' => 'Welcome to my portfolio website',
+            'author_name' => 'Suman Kumar Bhagat',
+            'author_email' => 'contact@example.com',
+            'author_phone' => '',
+            'site_url' => 'http://localhost/suman%20portfolio/'
+        ];
+        
+        foreach ($defaultSettings as $key => $value) {
+            $stmt = $db->prepare("INSERT IGNORE INTO site_settings (setting_key, setting_value) VALUES (?, ?)");
+            $stmt->execute([$key, $value]);
+        }
+        
         $stmt = $db->query("SELECT setting_key, setting_value FROM site_settings");
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $settings[$row['setting_key']] = $row['setting_value'];
         }
     } catch (Exception $e) {
         // Database not available, use defaults
+        error_log("Settings error: " . $e->getMessage());
     }
     
     // Set defaults if not present
