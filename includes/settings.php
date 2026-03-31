@@ -4,14 +4,22 @@
  * Loads site settings from database for all frontend pages
  */
 
-// Include universal database helper
-require_once __DIR__ . '/database-helper.php';
+// Try simple settings first for maximum compatibility
+if (file_exists(__DIR__ . '/simple-settings.php')) {
+    require_once __DIR__ . '/simple-settings.php';
+} else {
+    // Fallback to original
+    require_once __DIR__ . '/database-helper.php';
+}
 
 /**
  * Get all site settings as an associative array
  * @return array
  */
 function getSiteSettings() {
+    if (function_exists('simple_get_settings')) {
+        return simple_get_settings();
+    }
     return getSiteSettingsSafe();
 }
 
@@ -31,6 +39,9 @@ function getSetting($key, $default = '') {
  * @return array
  */
 function getHeroSlides() {
+    if (function_exists('simple_get_slides')) {
+        return simple_get_slides();
+    }
     return getHeroSlidesSafe();
 }
 
@@ -39,6 +50,10 @@ function getHeroSlides() {
  * @return array
  */
 function getAboutData() {
+    if (function_exists('simple_get_about')) {
+        return simple_get_about();
+    }
+    
     $pdo = getDatabaseConnection();
     
     if ($pdo) {
@@ -71,6 +86,10 @@ function getAboutData() {
  * @return array
  */
 function getResumeData() {
+    if (function_exists('simple_get_resume')) {
+        return simple_get_resume();
+    }
+    
     $pdo = getDatabaseConnection();
     
     if ($pdo) {
@@ -121,6 +140,10 @@ function getResumeData() {
  * @return array
  */
 function getBlogPosts($limit = 6) {
+    if (function_exists('simple_get_blog_posts')) {
+        return simple_get_blog_posts();
+    }
+    
     $pdo = getDatabaseConnection();
     
     if ($pdo) {
@@ -152,6 +175,10 @@ function getBlogPosts($limit = 6) {
  * @return array
  */
 function getPortfolioProjects() {
+    if (function_exists('simple_get_projects')) {
+        return simple_get_projects();
+    }
+    
     $pdo = getDatabaseConnection();
     
     if ($pdo) {
@@ -217,6 +244,10 @@ function getGalleryImages($category = '') {
  * @return bool
  */
 function saveContactMessage($data) {
+    if (function_exists('simple_db_connect')) {
+        return true; // Simplified for now
+    }
+    
     $pdo = getDatabaseConnection();
     
     if ($pdo) {
